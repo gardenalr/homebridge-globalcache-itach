@@ -156,7 +156,7 @@ function ItachAccessory(log, deviceType, config, portIndex) {
                 .on('set', this.setState.bind(this));
         }
         this.services.push(service);
-    } else if (this.deviceType == "ir") {
+    } else if (this.deviceType == "ir" || this.deviceType == "ir_blaster" || this.deviceType == "irtriport" || this.deviceType == "irtriport_blaster") {
         this.commands = config.ports[portIndex].commands;
         if (this.commands && this.commands.on && this.commands.off) {
             //Assume default to off.
@@ -233,19 +233,19 @@ ItachAccessory.prototype.doNextCall = function(commandKeys, callback) {
 
 ItachAccessory.prototype.setState = function (state, callback) {
     var command = "setstate";
-    if (this.deviceType == "ir") {
+    if (this.deviceType == "ir" || this.deviceType == "ir_blaster" || this.deviceType == "irtriport" || this.deviceType == "irtriport_blaster") {
         command = "sendir";
     }
-    command += (",1:" + (this.portIndex + 1) + ",");
+    command += (",1:" + (this.port) + ",");
 
-    if (this.deviceType == "ir") {
+    if (this.deviceType == "ir" || this.deviceType == "ir_blaster" || this.deviceType == "irtriport" || this.deviceType == "irtriport_blaster") {
         command += state;
     } else {
         command += (this.toggleMode || state ? '1' : '0');
     }
     this.sendSocketCommand(command, function (data) {
         var expected = command.trim();
-        if (this.deviceType == "ir") {
+        if (this.deviceType == "ir" || this.deviceType == "ir_blaster" || this.deviceType == "irtriport" || this.deviceType == "irtriport_blaster") {
             expected = "completeir" + command.substring(6, 12);
         }
         if (data.trim() == expected) {
@@ -259,7 +259,7 @@ ItachAccessory.prototype.setState = function (state, callback) {
                     });
                 }.bind(this), 1000);
             } else {
-                if (this.deviceType == "ir") {
+                if (this.deviceType == "ir" || this.deviceType == "ir_blaster" || this.deviceType == "irtriport" || this.deviceType == "irtriport_blaster") {
                     this.irState = state;
                     callback(null, this.irState);
                 } else {
@@ -277,7 +277,7 @@ ItachAccessory.prototype.setState = function (state, callback) {
 /* TODO
  */
 ItachAccessory.prototype.getState = function (callback) {
-    if (this.deviceType == "ir") {
+    if (this.deviceType == "ir" || this.deviceType == "ir_blaster" || this.deviceType == "irtriport" || this.deviceType == "irtriport_blaster") {
         callback(null, this.irState);
         return;
 
