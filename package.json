@@ -30,5 +30,5 @@
   "dependencies": {
     "net": ">=1.0"
   },
-  "homepage": "https://github.com/gardenalr/homebridge-globalcache-itach-flex/homebridge-globalcache-itach#readme"
+  "homepage": "https://github.com/gardenalr/homebridge-globalcache-itach-flex"
 }
