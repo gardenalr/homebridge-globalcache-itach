@@ -68,11 +68,15 @@ ItachPlatform.prototype.accessories = function (callback) {
             }
             var results = [];
             this.sendSocketCommand(l, 'getdevices', function (index, result) {
+            //device,0,0 WIFI
+            //device,1,1 IRTRIPORT
+            //endlistdevices
                 var currentDeviceConfig = this.devices[index];
                 var ports = result.split('\r');
                 if (ports.length > 2) {
                     for (var i = 1; i < ports.length - 2; i++) {
                         var portDetails = ports[i].split(',');
+                        //device,1,1 IRTRIPORT
                         if (portDetails.length != 3) {
                             this.log("Can't handle iTach port: " + ports[i]);
                             continue;
@@ -82,11 +86,12 @@ ItachPlatform.prototype.accessories = function (callback) {
                             this.log("Can't handle iTach device subtype: " + portDetails[2]);
                             continue;
                         }
-                        var portCount = parseInt(portCountAndType[0].trim());
-                        if  (portType == "irtriport" || portType == "irtriport_blaster") {	
-                            portCount = 3;	
-                        }
+                        //var portCount = parseInt(portCountAndType[0].trim());
+                        //example: 1
+                        portCount = currentDeviceConfig.ports.length;
+                        
                         var portType = portCountAndType[1].toLowerCase().trim();
+                        //example IR, IR_BLASTER, IRTRIPORT, IRTRIPORT_BLASTER
                         this.log('Found ' + portCount + ' ' + portType + " ports.");
                         for (var j = 0; j < portCount; j++) {
                             var disable = false;
@@ -114,25 +119,29 @@ ItachPlatform.prototype.accessories = function (callback) {
     }
 }
 
-/* Global Cache Accessories
- CC
- */
+/* Global Cache Accessories  CC */
 function ItachAccessory(log, deviceType, config, portIndex) {
+    //deviceType example IR, IR_BLASTER, IRTRIPORT, IRTRIPORT_BLASTER
+    //config XML
+    //portIndex 0, 1, 2
     this.log = log;
     var portConfig = null;
     if (config.ports && config.ports.length > portIndex) {
         portConfig = config.ports[portIndex];
+        // portConfig 0,1,2
     }
     this.name = config.name + " - " + (portIndex + 1);
     this.deviceType = deviceType;
     this.host = config.host;
     this.port = config.port;
-    this.portIndex = portIndex;
-    this.log("Configuring iTach accessory.  Name: " + this.name + ", Type: " + this.deviceType + " at port: " + this.portIndex);
+    this.portIndex = portIndex; //portIndex 0, 1, 2   
+    //this.log("Configuring iTach accessory.  Name: " + this.name + ", Type: " + this.deviceType + " at port: " + this.portIndex);
+    this.log("Configuring iTach accessory.  Name: " + this.name + ", Type: " + this.deviceType + " at port: " +  this.port);
     this.toggleMode = false;
     this.commands = {};
 
-    var id = uuid.generate('itach.' + deviceType + "." + this.host + "." + portIndex);
+    //var id = uuid.generate('itach.' + deviceType + "." + this.host + "." + portIndex);
+    var id = uuid.generate('itach.' + deviceType + "." + this.host + "." + this.name);
     Accessory.call(this, this.name, id);
     this.uuid_base = id;
 
