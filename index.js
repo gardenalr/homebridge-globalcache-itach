@@ -83,6 +83,9 @@ ItachPlatform.prototype.accessories = function (callback) {
                             continue;
                         }
                         var portCount = parseInt(portCountAndType[0].trim());
+                        if  (portType == "irtriport" || portType == "irtriport_blaster") {	
+                            portCount = 3;	
+                        }
                         var portType = portCountAndType[1].toLowerCase().trim();
                         this.log('Found ' + portCount + ' ' + portType + " ports.");
                         for (var j = 0; j < portCount; j++) {
