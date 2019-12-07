@@ -132,11 +132,12 @@ function ItachAccessory(log, deviceType, config, portIndex) {
     }
     this.name = config.name + " - " + (portIndex + 1);
     this.deviceType = deviceType;
-    this.host = config.host;
-    this.port = config.ports[portIndex].port;
-    this.portIndex = portIndex; //portIndex 0, 1, 2, 3, 4, 5...   
+    this.host = config.host; //192.168.X.XXX
+    this.port = config.port; //4998
+    this.portIndex = config.ports[portIndex].port;  //1, 2, 3
+    //portIndex 0, 1, 2, 3, 4, 5...   
     //this.log("Configuring iTach accessory.  Name: " + this.name + ", Type: " + this.deviceType + " at port: " + this.portIndex);
-    this.log("Configuring iTach accessory.  Name: " + this.name + ", Type: " + this.deviceType + " at port: " +  this.port);
+    this.log("Configuring iTach accessory.  Name: " + this.name + ", Type: " + this.deviceType + " at port: " +  portIndex);
     this.toggleMode = false;
     this.commands = {};
 
@@ -248,7 +249,7 @@ ItachAccessory.prototype.setState = function (state, callback) {
     if (this.deviceType == "ir" || this.deviceType == "ir_blaster" || this.deviceType == "irtriport" || this.deviceType == "irtriport_blaster") {
         command = "sendir";
     }
-    command += (",1:" + (this.port) + ",");
+    command += (",1:" + (this.portIndex) + ",");
 
     if (this.deviceType == "ir" || this.deviceType == "ir_blaster" || this.deviceType == "irtriport" || this.deviceType == "irtriport_blaster") {
         command += state;
@@ -263,7 +264,7 @@ ItachAccessory.prototype.setState = function (state, callback) {
         if (data.trim() == expected) {
             if (this.toggleMode) {
                 setTimeout(function () {
-                    var command = "setstate,1:" + (this.portIndex + 1) + ",0";
+                    var command = "setstate,1:" + (this.portIndex) + ",0";
                     this.sendSocketCommand(command, function (data) {
                         if (data.trim() == command.trim()) {
                             callback(null);
