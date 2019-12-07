@@ -133,8 +133,8 @@ function ItachAccessory(log, deviceType, config, portIndex) {
     this.name = config.name + " - " + (portIndex + 1);
     this.deviceType = deviceType;
     this.host = config.host;
-    this.port = config.port;
-    this.portIndex = portIndex; //portIndex 0, 1, 2   
+    this.port = config.ports[portIndex].port;
+    this.portIndex = portIndex; //portIndex 0, 1, 2, 3, 4, 5...   
     //this.log("Configuring iTach accessory.  Name: " + this.name + ", Type: " + this.deviceType + " at port: " + this.portIndex);
     this.log("Configuring iTach accessory.  Name: " + this.name + ", Type: " + this.deviceType + " at port: " +  this.port);
     this.toggleMode = false;
