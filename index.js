@@ -144,12 +144,14 @@ function ItachAccessory(log, deviceType, config, portIndex) {
     //var id = uuid.generate('itach.' + deviceType + "." + this.host + "." + portIndex);
     var id = uuid.generate('itach.' + deviceType + "." + this.host + "." + this.name);
     Accessory.call(this, this.name, id);
+    this.log(this.name + " - " + id);
     this.uuid_base = id;
 
     if (portConfig) {
         this.name = portConfig.name ? portConfig.name : this.name;
         this.toggleMode = portConfig.toggleMode;
     }
+    this.log("Acessory ID: " + this.name + " - " + id);
 
     this.services = [];
     if (this.deviceType == "relay") {
