@@ -194,6 +194,7 @@ function ItachAccessory(log, deviceType, config, portIndex) {
             service.getCharacteristic(Characteristic.On)
                 .on('set', this.setIrState.bind(this, command))
                 .on('get', this.getState.bind(this));
+            this.irState = Characteristic.Off;
             this.services.push(service);
         }
 
